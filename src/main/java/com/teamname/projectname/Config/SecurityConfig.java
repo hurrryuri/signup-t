@@ -28,9 +28,20 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((auth) ->
         { //각 자원, html 권한
-            auth.requestMatchers("/assets/**", "/css.**", "/js.**").permitAll();
-            auth.requestMatchers("/**").permitAll(); //모든 매핑
+            auth.requestMatchers("/assets/**", "/css/**", "/js/**").permitAll();
+            //세부페이지 또는 Controller가 완성되면 삭제
+            //auth.requestMatchers("/**").permitAll(); //모든 매핑 허용
+            auth.requestMatchers("/h2-console/**").permitAll();
+            //메인페이지 및 서브페이지
+            auth.requestMatchers("/").permitAll();
+            //회원관련(모든 사용자)-로그인, 회원가입, 임시비밀번호 발급
+            auth.requestMatchers("/login", "/register", "/password").permitAll();
+            //인증된 사용자만 접근 가능
+            auth.requestMatchers("/modify","/logout").authenticated(); //수정, 로그아웃
+            //맵핑명을 작업이름/ 맵핑명
+            //auth.requestMatchers("/modify/**").authenticated(); modify로 시작하는 모든 매핑 제한
         });
+        //http.headers(.frameOptions().sameOrigin());
 
         //로그인 정보
         http.formLogin(login->login

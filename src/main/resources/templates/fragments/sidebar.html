@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-xmlns:th="http://www.thymeleaf.org">
+xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,7 +10,16 @@ xmlns:th="http://www.thymeleaf.org">
 </head>
 <body>
     <div th:fragment="sidebar" class="border-end bg-white" id="sidebar-wrapper">
-    <div class="sidebar-heading border-bottom bg-light">Start Bootstrap</div>
+    <div class="sidebar-heading border-bottom bg-light">
+        <span sec:authorize="!isAuthenticated()">Start Bootstrap</span>
+        <div sec:authorize="isAuthenticated()"><!--로그인 성공시 노출 -->
+            <!--변수명, getter 메소드명-->
+            <span th:text="${#authentication.principal.username}">아이디</span><br>
+            <span th:text="${#authentication.principal.DisplayUsername}">회원이름</span><span>님</span><br>
+            <span th:text="${#authentication.principal.usertel}">전화번호</span><br>
+            <span th:text="${#authentication.principal.userlevelDescription}">등급</span>
+        </div>
+    </div>
     <div class="list-group list-group-flush">
         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Dashboard</a>
         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Shortcuts</a>

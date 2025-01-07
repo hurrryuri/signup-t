@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-xmlns:th="http://www.thymeleaf.org">
+xmlns:th="http://www.thymeleaf.org"
+ xmlns:sec="http://www.w3.org/1999/xhtml"> <!--보안-->
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -18,12 +19,23 @@ xmlns:th="http://www.thymeleaf.org">
                 <li class="nav-item active"><a class="nav-link" href="#!">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#!">Link</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">회원관리</a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#!">Action</a>
-                        <a class="dropdown-item" href="#!">Another action</a>
+                        <div sec:authorize="isAuthenticated()"><!--로그인 성공시 노출 -->
+                            <!--변수명, getter 메소드명-->
+                            <span th:text="${#authentication.principal.username}">아이디</span><br>
+                            <span th:text="${#authentication.principal.DisplayUsername}">회원이름</span><span>님</span><br>
+                            <span th:text="${#authentication.principal.usertel}">전화번호</span><br>
+                            <span th:text="${#authentication.principal.userlevelDescription}">등급</span>
+                        </div>
+
+                        <!--인증 상태에 따라서 메뉴 노출을 설정-->
+                        <a sec:authorize="!isAuthenticated()" class="dropdown-item" th:href="@{/login}">로그인</a>
+                        <a sec:authorize="!isAuthenticated()" class="dropdown-item" th:href="@{/register}">회원가입</a>
+                        <a sec:authorize="!isAuthenticated()" class="dropdown-item" th:href="@{/password}">비밀번호 발급</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#!">Something else here</a>
+                        <a sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{/modify}">회원수정</a>
+                        <a sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{/logout}">로그아웃</a>
                     </div>
                 </li>
             </ul>
